@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:quranmemmorize_pkm/widgets/bottom_nav.dart';
 
-class HomeScreen extends StatelessWidget {
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -237,53 +246,21 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         extendBody: true,
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          child: Container(
-            height: 80,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.15),
-                  offset: const Offset(0, -4),
-                  blurRadius: 25,
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildNavItem(Icons.grid_view, true),
-                  _buildNavItem(Icons.calendar_today_outlined, false),
-                  _buildNavItem(Icons.menu_book_outlined, false),
-                  _buildNavItem(Icons.bar_chart_outlined, false),
-                  _buildNavItem(Icons.person_outline, false),
-                ],
-              ),
-            ),
-          ),
+        bottomNavigationBar: BottomNavigationBarWidget(
+          selectedIndex: _selectedIndex,
+          onItemTapped: (int index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
         ),
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, bool isSelected) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          color: isSelected ? const Color(0xff6D9886) : Colors.grey,
-          size: 24,
-        ),
-        const SizedBox(height: 4),
-      ],
-    );
-  }
+
+
+
 
   Widget _buildScheduleCard(
       String title,
