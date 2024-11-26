@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quranmemmorize_pkm/widgets/bottom_nav.dart';
+import 'package:quranmemmorize_pkm/widgets/navigation.dart';
 
-
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -200,8 +192,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         showImage: true,
                                         height: 220,
                                         width: cardWidth,
-                                        imagePath: 'assets/images/onboarding3.png',
-                                        backgroundColor: const Color(0xffF2E7D5),
+                                        imagePath:
+                                            'assets/images/onboarding3.png',
+                                        backgroundColor:
+                                            const Color(0xffF2E7D5),
                                       ),
                                     ],
                                   ),
@@ -217,8 +211,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         showImage: true,
                                         height: 180,
                                         width: cardWidth,
-                                        imagePath: 'assets/images/onboarding1.png',
-                                        backgroundColor: const Color(0xffF2E7D5),
+                                        imagePath:
+                                            'assets/images/onboarding1.png',
+                                        backgroundColor:
+                                            const Color(0xffF2E7D5),
                                       ),
                                       const SizedBox(height: 16),
                                       _buildScheduleCard(
@@ -227,7 +223,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         showImage: false,
                                         height: 140,
                                         width: cardWidth,
-                                        backgroundColor: const Color(0xff393E46),
+                                        backgroundColor:
+                                            const Color(0xff393E46),
                                         isViewMore: true,
                                       ),
                                     ],
@@ -246,32 +243,21 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         extendBody: true,
-        bottomNavigationBar: BottomNavigationBarWidget(
-          selectedIndex: _selectedIndex,
-          onItemTapped: (int index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ),
+        bottomNavigationBar: const CustomBottomNavigation(),
       ),
     );
   }
 
-
-
-
-
   Widget _buildScheduleCard(
-      String title,
-      String subtitle, {
-        bool showImage = true,
-        String imagePath = '',
-        Color backgroundColor = const Color(0xffF2E7D5),
-        bool isViewMore = false,
-        required double height,
-        required double width,
-      }) {
+    String title,
+    String subtitle, {
+    bool showImage = true,
+    String imagePath = '',
+    Color backgroundColor = const Color(0xffF2E7D5),
+    bool isViewMore = false,
+    required double height,
+    required double width,
+  }) {
     return Container(
       height: height,
       width: width,

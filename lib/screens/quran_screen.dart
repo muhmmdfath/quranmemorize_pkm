@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:quranmemmorize_pkm/widgets/bottom_nav.dart';
+import 'package:quranmemmorize_pkm/widgets/navigation.dart';
+
+// Definisi warna untuk konsistensi
+const Color kPrimaryColor = Color(0xff6D9886);
+const Color kSecondaryColor = Color(0xffF2E7D5);
+const Color kTextColor = Colors.grey;
 
 class QuranScreen extends StatefulWidget {
   const QuranScreen({super.key});
 
   @override
-  _QuranScreenState createState() => _QuranScreenState();
+  State<QuranScreen> createState() => _QuranScreenState();
 }
 
 class _QuranScreenState extends State<QuranScreen> {
-  int _selectedIndex = 2; // Default index for Quran Screen
+  final int _selectedIndex = 2; // Default index untuk Quran Screen
 
   @override
   Widget build(BuildContext context) {
@@ -23,66 +28,71 @@ class _QuranScreenState extends State<QuranScreen> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xff6D9886),
+        backgroundColor: kPrimaryColor,
       ),
-      body: ListView.builder(
-        itemCount: surahList.length,
-        itemBuilder: (context, index) {
-          final surah = surahList[index];
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundColor: const Color(0xffF2E7D5),
+      body: surahList.isNotEmpty
+          ? ListView.builder(
+              itemCount: surahList.length,
+              itemBuilder: (context, index) {
+                final surah = surahList[index];
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: kSecondaryColor,
+                    child: Text(
+                      surah['number'].toString(),
+                      style: const TextStyle(
+                        fontFamily: 'child',
+                        fontWeight: FontWeight.bold,
+                        color: kPrimaryColor,
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    surah['name'],
+                    style: const TextStyle(
+                      fontFamily: 'child',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  subtitle: Text(
+                    surah['translation'],
+                    style: const TextStyle(
+                      fontFamily: 'child',
+                      fontSize: 14,
+                      color: kTextColor,
+                    ),
+                  ),
+                  trailing:
+                      const Icon(Icons.arrow_forward_ios, color: kTextColor),
+                  onTap: () {
+                    // Navigasi ke halaman detail Surah (dapat diimplementasikan nanti)
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Opening Surah: ${surah['name']}'),
+                      ),
+                    );
+                  },
+                );
+              },
+            )
+          : const Center(
               child: Text(
-                surah['number'].toString(),
-                style: const TextStyle(
+                'No Surah available.',
+                style: TextStyle(
                   fontFamily: 'child',
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff6D9886),
+                  fontSize: 16,
+                  color: kTextColor,
                 ),
               ),
             ),
-            title: Text(
-              surah['name'],
-              style: const TextStyle(
-                fontFamily: 'child',
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            subtitle: Text(
-              surah['translation'],
-              style: const TextStyle(
-                fontFamily: 'child',
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
-            onTap: () {
-              // Navigate to Surah details page (can be implemented later)
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Opening Surah: ${surah['name']}'),
-                ),
-              );
-            },
-          );
-        },
-      ),
-      bottomNavigationBar: BottomNavigationBarWidget(
-        selectedIndex: _selectedIndex,
-        onItemTapped: (int index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-
-        ),
-      );
+      extendBody: true,
+      bottomNavigationBar: const CustomBottomNavigation(),
+    );
   }
 }
 
-// Dummy list of Surah for demonstration
+// Daftar Surah untuk demonstrasi
 final List<Map<String, dynamic>> surahList = [
   {'number': 1, 'name': 'Al-Fatihah', 'translation': 'The Opening'},
   {'number': 2, 'name': 'Al-Baqarah', 'translation': 'The Cow'},
@@ -91,8 +101,5 @@ final List<Map<String, dynamic>> surahList = [
   {'number': 5, 'name': 'Al-Ma’idah', 'translation': 'The Table Spread'},
   {'number': 6, 'name': 'Al-An’am', 'translation': 'The Cattle'},
   {'number': 7, 'name': 'Al-A’raf', 'translation': 'The Heights'},
-  // Add more Surah as needed
+  // Tambahkan lebih banyak Surah jika diperlukan
 ];
-
-
-

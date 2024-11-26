@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'screens/onboarding_screen.dart';
+import 'routes/app_routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -8,10 +7,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-
-  const MyApp({
-    super.key,
-  });
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +17,9 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color(0xff6D9886),
         scaffoldBackgroundColor: const Color(0xffF7F7F7),
       ),
-      home: const OnboardingScreen(),
       debugShowCheckedModeBanner: false,
+      initialRoute: AppRoutes.onboarding, // Tentukan rute awal
+      routes: AppRoutes.routes, // Gunakan rute dari AppRoutes
     );
   }
 }
