@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:quranmemmorize_pkm/screens/tabs/hijb_tab.dart';
+import 'package:quranmemmorize_pkm/screens/tabs/page_tab.dart';
+import 'package:quranmemmorize_pkm/screens/tabs/para_tab.dart';
+import 'package:quranmemmorize_pkm/screens/tabs/surah_tab.dart';
 import '../core/constant/app_colors.dart';
 import '../widgets/navigation.dart';
 
@@ -21,45 +25,48 @@ class QuranScreen extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: _greeting(),
                 ),
-                const SliverAppBar(
+                SliverAppBar(
                   pinned: true,
                   automaticallyImplyLeading: false,
                   elevation: 0,
+                  scrolledUnderElevation: 0,
                   backgroundColor: AppColors.backgroundColor,
+                  shape: const Border(
+                    bottom: BorderSide(color: AppColors.backgroundColor)
+                  ),
                   bottom: PreferredSize(
-                      preferredSize: Size.fromHeight(0),
-                      child: TabBar(tabs: [
-                        Tab(child: Text('Surah',
-                          style: TextStyle(
-                            fontFamily: 'child',
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),),
-                        Tab(child: Text('Para',
-                          style: TextStyle(
-                            fontFamily: 'child',
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),),
-                        Tab(child: Text('Page',
-                          style: TextStyle(
-                            fontFamily: 'child',
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),),
-                        Tab(child: Text('Ayat',
-                          style: TextStyle(
-                            fontFamily: 'child',
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),)
-                      ])
+                    preferredSize: const Size.fromHeight(0),
+                    child: TabBar(
+                        unselectedLabelColor: AppColors.dashboardColor,
+                        labelColor: AppColors.primaryColor,
+                        indicatorColor: AppColors.primaryColor,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        indicatorWeight: 3,
+                        tabs: [
+                          _tabItem(label: "Surah"),
+                          _tabItem(label: "Para"),
+                          _tabItem(label: "Page"),
+                          _tabItem(label: "Hijb"),
+                        ]
+                    ),
                   ),
                 )
               ],
-              body: Container()
+              body: const TabBarView(children: [SurahTab(), ParaTab(), PageTab(), HijbTab()])
           )
         ),
+      ),
+    );
+  }
+
+  Tab _tabItem({required String label}) {
+    return Tab(
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontFamily: 'child',
+          fontWeight: FontWeight.w500,
+        )
       ),
     );
   }
@@ -171,6 +178,7 @@ class QuranScreen extends StatelessWidget {
     backgroundColor: AppColors.backgroundColor,
     automaticallyImplyLeading: false,
     elevation: 0,
+    scrolledUnderElevation: 0,
     title: Row(children: [
       IconButton(onPressed: (() => {}), icon: SvgPicture.asset('assets/svgs/menu-icon.svg')),
       const SizedBox(

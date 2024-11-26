@@ -40,6 +40,7 @@ flutter:
   assets:
     - assets/images/
     - assets/svgs/
+    - assets/datas/
 
   # Localization configuration
   generate: true
@@ -51,3 +52,6 @@ flutter:
     - family: child
       fonts:
         - asset: assets/fonts/nunito/Nunito-Regular.ttf
+    - family: arab
+      fonts:
+        - asset: assets/fonts/Amiri_Quran/AmiriQuran-Regular.ttf
