@@ -1,105 +1,184 @@
 import 'package:flutter/material.dart';
-import 'package:quranmemmorize_pkm/widgets/navigation.dart';
+import 'package:flutter_svg/svg.dart';
+import '../core/constant/app_colors.dart';
+import '../widgets/navigation.dart';
 
-// Definisi warna untuk konsistensi
-const Color kPrimaryColor = Color(0xff6D9886);
-const Color kSecondaryColor = Color(0xffF2E7D5);
-const Color kTextColor = Colors.grey;
-
-class QuranScreen extends StatefulWidget {
+class QuranScreen extends StatelessWidget {
   const QuranScreen({super.key});
-
-  @override
-  State<QuranScreen> createState() => _QuranScreenState();
-}
-
-class _QuranScreenState extends State<QuranScreen> {
-  final int _selectedIndex = 2; // Default index untuk Quran Screen
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Al-Qur\'an',
-          style: TextStyle(
-            fontFamily: 'child',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: kPrimaryColor,
-      ),
-      body: surahList.isNotEmpty
-          ? ListView.builder(
-              itemCount: surahList.length,
-              itemBuilder: (context, index) {
-                final surah = surahList[index];
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: kSecondaryColor,
-                    child: Text(
-                      surah['number'].toString(),
-                      style: const TextStyle(
-                        fontFamily: 'child',
-                        fontWeight: FontWeight.bold,
-                        color: kPrimaryColor,
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    surah['name'],
-                    style: const TextStyle(
-                      fontFamily: 'child',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  subtitle: Text(
-                    surah['translation'],
-                    style: const TextStyle(
-                      fontFamily: 'child',
-                      fontSize: 14,
-                      color: kTextColor,
-                    ),
-                  ),
-                  trailing:
-                      const Icon(Icons.arrow_forward_ios, color: kTextColor),
-                  onTap: () {
-                    // Navigasi ke halaman detail Surah (dapat diimplementasikan nanti)
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Opening Surah: ${surah['name']}'),
-                      ),
-                    );
-                  },
-                );
-              },
-            )
-          : const Center(
-              child: Text(
-                'No Surah available.',
-                style: TextStyle(
-                  fontFamily: 'child',
-                  fontSize: 16,
-                  color: kTextColor,
-                ),
-              ),
-            ),
-      extendBody: true,
+      backgroundColor: AppColors.backgroundColor,
+      appBar: _appBar(),
       bottomNavigationBar: const CustomBottomNavigation(),
+      body: DefaultTabController(
+        length: 4,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverToBoxAdapter(
+                  child: _greeting(),
+                ),
+                const SliverAppBar(
+                  pinned: true,
+                  automaticallyImplyLeading: false,
+                  elevation: 0,
+                  backgroundColor: AppColors.backgroundColor,
+                  bottom: PreferredSize(
+                      preferredSize: Size.fromHeight(0),
+                      child: TabBar(tabs: [
+                        Tab(child: Text('Surah',
+                          style: TextStyle(
+                            fontFamily: 'child',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),),
+                        Tab(child: Text('Para',
+                          style: TextStyle(
+                            fontFamily: 'child',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),),
+                        Tab(child: Text('Page',
+                          style: TextStyle(
+                            fontFamily: 'child',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),),
+                        Tab(child: Text('Ayat',
+                          style: TextStyle(
+                            fontFamily: 'child',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),)
+                      ])
+                  ),
+                )
+              ],
+              body: Container()
+          )
+        ),
+      ),
     );
   }
+
+  Column _greeting() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Assalamu'alaikum",
+          style: TextStyle(
+            fontFamily: 'child',
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        const Text(
+          "Muhammad Fatih",
+          style: TextStyle(
+            fontFamily: 'primary',
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(
+          height: 24,
+        ),
+        _lastRead()
+      ],
+    );
+  }
+
+  Stack _lastRead() {
+    return Stack(
+      children: [
+        Container(
+          height: 131,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  stops: [
+                    .58,1
+                  ],
+                  colors: [
+                    Color(0xFF6D9886),
+                    Color(0xFFF2E7D5),
+                  ]
+              )
+          ),
+        ),
+        Positioned(
+            bottom: 0,
+            right: 0,
+            child: SvgPicture.asset('assets/svgs/quran.svg')),
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  SvgPicture.asset('assets/svgs/book.svg'),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  const Text('Last Read',
+                    style: TextStyle(
+                      fontFamily: 'child',
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              )
+              ,
+              const SizedBox(
+                height: 20,
+              ),
+              const Text('Al-Fatihah',
+                style: TextStyle(
+                  fontFamily: 'child',
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                ),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              const Text('Ayat No: 1',
+                style: TextStyle(
+                  fontFamily: 'child',
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  AppBar _appBar() => AppBar(
+    backgroundColor: AppColors.backgroundColor,
+    automaticallyImplyLeading: false,
+    elevation: 0,
+    title: Row(children: [
+      IconButton(onPressed: (() => {}), icon: SvgPicture.asset('assets/svgs/menu-icon.svg')),
+      const SizedBox(
+        width: 24,
+      ),
+      const Spacer(),
+      IconButton(onPressed: (() => {}), icon: SvgPicture.asset('assets/svgs/search.svg')),
+    ],),
+  );
 }
 
-// Daftar Surah untuk demonstrasi
-final List<Map<String, dynamic>> surahList = [
-  {'number': 1, 'name': 'Al-Fatihah', 'translation': 'The Opening'},
-  {'number': 2, 'name': 'Al-Baqarah', 'translation': 'The Cow'},
-  {'number': 3, 'name': 'Aali Imran', 'translation': 'The Family of Imran'},
-  {'number': 4, 'name': 'An-Nisa', 'translation': 'The Women'},
-  {'number': 5, 'name': 'Al-Ma’idah', 'translation': 'The Table Spread'},
-  {'number': 6, 'name': 'Al-An’am', 'translation': 'The Cattle'},
-  {'number': 7, 'name': 'Al-A’raf', 'translation': 'The Heights'},
-  // Tambahkan lebih banyak Surah jika diperlukan
-];
