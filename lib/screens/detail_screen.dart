@@ -110,9 +110,10 @@ class DetailScreen extends StatelessWidget {
                   color: AppColors.dashboardColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
-                  height: 1.5
+                  height: 2.5
               ),
               textAlign: TextAlign.right,
+              textHeightBehavior: const TextHeightBehavior(applyHeightToLastDescent: true),
             ),
             const SizedBox(
               height: 16,

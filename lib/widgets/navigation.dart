@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:quranmemmorize_pkm/routes/app_routes.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomBottomNavigation extends StatelessWidget {
   const CustomBottomNavigation({super.key});
 
   Widget _buildNavItem(
-      BuildContext context, IconData icon, bool isSelected, String route) {
+      BuildContext context,
+      IconData? icon,
+      String? svgAsset,
+      bool isSelected,
+      String route,
+      ) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, route); // Navigasi ke rute yang ditentukan
@@ -13,11 +19,18 @@ class CustomBottomNavigation extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            color: isSelected ? const Color(0xff6D9886) : Colors.grey,
-            size: 24,
-          ),
+          if (svgAsset != null)
+            SvgPicture.asset(
+              svgAsset,
+              color: isSelected ? const Color(0xff6D9886) : Colors.grey,
+              height: 24,
+            )
+          else if (icon != null)
+            Icon(
+              icon,
+              color: isSelected ? const Color(0xff6D9886) : Colors.grey,
+              size: 24,
+            ),
           const SizedBox(height: 4),
         ],
       ),
@@ -46,13 +59,12 @@ class CustomBottomNavigation extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(context, Icons.grid_view, true, AppRoutes.home),
-              _buildNavItem(context, Icons.calendar_today_outlined, false,
+              _buildNavItem(context, Icons.grid_view, null, true, AppRoutes.home),
+              _buildNavItem(context, Icons.calendar_today_outlined, null, false,
                   AppRoutes.calendar),
-              _buildNavItem(
-                  context, Icons.menu_book_outlined, false, AppRoutes.quran),
-              _buildNavItem(context, Icons.bar_chart_outlined, false, '/'),
-              _buildNavItem(context, Icons.person_outline, false, '/'),
+              _buildNavItem(context, null, 'assets/svgs/quran-icon.svg', false, AppRoutes.quran),
+              _buildNavItem(context, null, 'assets/svgs/bar-chart.svg', false, '/'),
+              _buildNavItem(context, null, 'assets/svgs/user.svg', false, '/'),
             ],
           ),
         ),
