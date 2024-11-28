@@ -64,7 +64,7 @@ class CustomBottomNavigation extends StatelessWidget {
                   AppRoutes.calendar),
               _buildNavItem(context, null, 'assets/svgs/quran-icon.svg', false, AppRoutes.quran),
               _buildNavItem(context, null, 'assets/svgs/bar-chart.svg', false, '/'),
-              _buildNavItem(context, null, 'assets/svgs/user.svg', false, '/'),
+              _buildNavItem(context, null, 'assets/svgs/user.svg', false, AppRoutes.profile),
             ],
           ),
         ),
