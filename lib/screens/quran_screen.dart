@@ -44,7 +44,7 @@ class QuranScreen extends StatelessWidget {
                         indicatorWeight: 3,
                         tabs: [
                           _tabItem(label: "Surah"),
-                          _tabItem(label: "Para"),
+                          _tabItem(label: "Juz"),
                           _tabItem(label: "Page"),
                           _tabItem(label: "Hijb"),
                         ]
@@ -52,7 +52,7 @@ class QuranScreen extends StatelessWidget {
                   ),
                 )
               ],
-              body: const TabBarView(children: [SurahTab(), ParaTab(), PageTab(), HijbTab()])
+              body: const TabBarView(children: [SurahTab(), JuzTab(), PageTab(), HijbTab()])
           )
         ),
       ),

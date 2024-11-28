@@ -1,27 +1,29 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../core/constant/app_colors.dart';
-import '../../domain/model/surah.dart';
+import '../../domain/model/quran.dart';
 import '../detail_screen.dart';
 
 class SurahTab extends StatelessWidget {
   const SurahTab({super.key});
 
-  Future<List<Surah>> _getSurahList() async {
-    String data = await rootBundle.loadString('assets/datas/list-surah.json');
-    return surahFromJson(data);
+  Future<List<Quran>> _getSurahList() async {
+    String data = await rootBundle.loadString('assets/datas/quran.json');
+    List<dynamic> jsonList = json.decode(data);
+    return jsonList.map((surahJson) => Quran.fromJson(surahJson)).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Surah>>(
+    return FutureBuilder<List<Quran>>(
         future: _getSurahList(),
         initialData: [],
         builder: ((context, snapshot) {
           if (!snapshot.hasData) {
-            return Container();
+            return const Center(child: CircularProgressIndicator());
           }
           return ListView.separated(
               itemBuilder: (context, index) => _surahItem(
@@ -32,13 +34,13 @@ class SurahTab extends StatelessWidget {
         }));
   }
 
-  Widget _surahItem({required Surah surah, required BuildContext context}) =>
+  Widget _surahItem({required Quran surah, required BuildContext context}) =>
       GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => DetailScreen(
-                noSurat: surah.nomor,
+                noSurat: surah.id,
               )));
         },
         child: Padding(
@@ -53,9 +55,9 @@ class SurahTab extends StatelessWidget {
                     width: 36,
                     child: Center(
                         child: Text(
-                          "${surah.nomor}",
+                          "${surah.id}",
                           style: const TextStyle(
-                            fontFamily: 'primary',
+                              fontFamily: 'primary',
                               color: AppColors.dashboardColor, fontWeight: FontWeight.w500),
                         )),
                   )
@@ -69,9 +71,9 @@ class SurahTab extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        surah.namaLatin,
+                        surah.nameSimple,
                         style: const TextStyle(
-                          fontFamily: 'primary',
+                            fontFamily: 'primary',
                             color: AppColors.dashboardColor,
                             fontWeight: FontWeight.w500,
                             fontSize: 16),
@@ -82,9 +84,10 @@ class SurahTab extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            surah.tempatTurun.name,
+                            surah.revelationPlace == RevelationPlace.MAKKAH
+                                ? 'Makkah' : 'Madinah',
                             style: const TextStyle(
-                              fontFamily: 'child',
+                                fontFamily: 'child',
                                 color: AppColors.textColor,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 12),
@@ -103,9 +106,9 @@ class SurahTab extends StatelessWidget {
                             width: 5,
                           ),
                           Text(
-                            "${surah.jumlahAyat} Ayat",
+                            "${surah.verses.length} Ayat",
                             style: const TextStyle(
-                              fontFamily: 'child',
+                                fontFamily: 'child',
                                 color: AppColors.textColor,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 12),
@@ -115,9 +118,9 @@ class SurahTab extends StatelessWidget {
                     ],
                   )),
               Text(
-                surah.nama,
+                surah.nameArabic,
                 style: const TextStyle(
-                  fontFamily: 'arab',
+                    fontFamily: 'arab',
                     color: AppColors.primaryColor, fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ],
