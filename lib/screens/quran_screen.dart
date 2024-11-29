@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:quranmemmorize_pkm/screens/tabs/hijb_tab.dart';
 import 'package:quranmemmorize_pkm/screens/tabs/page_tab.dart';
-import 'package:quranmemmorize_pkm/screens/tabs/para_tab.dart';
+import 'package:quranmemmorize_pkm/screens/tabs/juz_tab.dart';
 import 'package:quranmemmorize_pkm/screens/tabs/surah_tab.dart';
 import '../core/constant/app_colors.dart';
 import '../widgets/navigation.dart';

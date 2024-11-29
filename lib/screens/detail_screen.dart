@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:quranmemmorize_pkm/screens/quran_page_screen.dart';
 import '../core/constant/app_colors.dart';
 import '../domain/model/ayat.dart';
 import '../domain/model/surah.dart';
@@ -239,24 +240,51 @@ class DetailScreen extends StatelessWidget {
         elevation: 0,
         scrolledUnderElevation: 0,
         title: Row(children: [
+          // Back button
           IconButton(
-              onPressed: (() => Navigator.of(context).pop()),
-              icon: SvgPicture.asset('assets/svgs/back-icon.svg')),
+            onPressed: (() => Navigator.of(context).pop()),
+            icon: SvgPicture.asset('assets/svgs/back-icon.svg'),
+          ),
           const SizedBox(
-            width: 24,
+            width: 5,
           ),
           Text(
             surah.namaLatin,
-            style:
-                const TextStyle(
-                  color: AppColors.dashboardColor,
-                    fontFamily: 'child',
-                    fontSize: 20, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              color: AppColors.dashboardColor,
+              fontFamily: 'child',
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(width: 10,),
+          Text(
+            surah.nama,
+            style: const TextStyle(
+              color: AppColors.dashboardColor,
+              fontFamily: 'arab',
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const Spacer(),
+          // Add icon to navigate to QuranPageScreen
           IconButton(
-              onPressed: (() => {}),
-              icon: SvgPicture.asset('assets/svgs/search-icon.svg')),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuranPageScreen(
+                    surahId: surah.nomor,  // Pass the Surah number or other relevant info
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.library_books,
+              color: AppColors.dashboardColor,
+            ),
+          ),
         ]),
       );
 }
