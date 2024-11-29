@@ -5,6 +5,23 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../core/constant/app_colors.dart';
 import '../domain/model/quran.dart';
 
+String arabicToLatinNumerals(int number) {
+  const arabicNumerals = {
+    '0': '٠',
+    '1': '١',
+    '2': '٢',
+    '3': '٣',
+    '4': '٤',
+    '5': '٥',
+    '6': '٦',
+    '7': '٧',
+    '8': '٨',
+    '9': '٩'
+  };
+
+  return number.toString().split('').map((digit) => arabicNumerals[digit] ?? digit).join();
+}
+
 class QuranPageScreen extends StatefulWidget {
   final int surahId;
   final int initialPage;
@@ -66,13 +83,13 @@ class _QuranPageScreenState extends State<QuranPageScreen> {
 
       final currentPageIndex = allPagesInQuran.indexOf(_currentPage);
 
-      if (currentPageIndex < allPagesInQuran.length - 1) {
-        final nextPage = allPagesInQuran[currentPageIndex + 1];
-        final surahsOnNextPage = _quranList.where((surah) =>
-            surah.verses.any((verse) => verse.pageNumber == nextPage)).toList();
+      if (currentPageIndex > 0) {
+        final previousPage = allPagesInQuran[currentPageIndex - 1];
+        final surahsOnPreviousPage = _quranList.where((surah) =>
+            surah.verses.any((verse) => verse.pageNumber == previousPage)).toList();
 
-        _currentPage = nextPage;
-        _currentSurahIndex = _quranList.indexOf(surahsOnNextPage.first);
+        _currentPage = previousPage;
+        _currentSurahIndex = _quranList.indexOf(surahsOnPreviousPage.first);
       }
     });
   }
@@ -98,13 +115,13 @@ class _QuranPageScreenState extends State<QuranPageScreen> {
 
       final currentPageIndex = allPagesInQuran.indexOf(_currentPage);
 
-      if (currentPageIndex > 0) {
-        final previousPage = allPagesInQuran[currentPageIndex - 1];
-        final surahsOnPreviousPage = _quranList.where((surah) =>
-            surah.verses.any((verse) => verse.pageNumber == previousPage)).toList();
+      if (currentPageIndex < allPagesInQuran.length - 1) {
+        final nextPage = allPagesInQuran[currentPageIndex + 1];
+        final surahsOnNextPage = _quranList.where((surah) =>
+            surah.verses.any((verse) => verse.pageNumber == nextPage)).toList();
 
-        _currentPage = previousPage;
-        _currentSurahIndex = _quranList.indexOf(surahsOnPreviousPage.first);
+        _currentPage = nextPage;
+        _currentSurahIndex = _quranList.indexOf(surahsOnNextPage.first);
       }
     });
   }
@@ -134,7 +151,7 @@ class _QuranPageScreenState extends State<QuranPageScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  currentSurah.nameArabic,
+                  '${currentSurah.nameArabic} (${arabicToLatinNumerals(currentSurah.id)})',
                   style: const TextStyle(
                     color: AppColors.dashboardColor,
                     fontSize: 18,
@@ -142,7 +159,7 @@ class _QuranPageScreenState extends State<QuranPageScreen> {
                   ),
                 ),
                 Text(
-                  'Juz $currentJuz',
+                  'جزء ${arabicToLatinNumerals(currentJuz)}',
                   style: const TextStyle(
                     color: AppColors.textColor,
                     fontSize: 12,
@@ -239,7 +256,7 @@ class _QuranPageScreenState extends State<QuranPageScreen> {
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           child: Text(
-                            '$_currentPage',
+                            arabicToLatinNumerals(_currentPage),
                             style: TextStyle(
                               color: AppColors.backgroundColor,
                               fontSize: 18,
@@ -306,13 +323,31 @@ class _QuranPageScreenState extends State<QuranPageScreen> {
                       height: 2.2,
                     ),
                   ),
-                  TextSpan(
-                    text: ' ${verse.verseNumber} ',
-                    style: TextStyle(
-                      fontFamily: 'arab',
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.dashboardColor,
-                      fontSize: verseNumberFontSize,
+                  WidgetSpan(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/svgs/nomor-surah.svg',
+                            width: 28,
+                            color: AppColors.dashboardColor.withOpacity(0.5),
+                          ),
+                          Positioned(
+                            top: verseNumberFontSize / 5,
+                            child: Text(
+                              arabicToLatinNumerals(verse.verseNumber),
+                              style: TextStyle(
+                                fontFamily: 'arab',
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.primaryColor,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
